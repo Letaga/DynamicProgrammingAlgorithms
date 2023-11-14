@@ -1,5 +1,5 @@
-﻿#include <iostream>
-#include <math.h> 
+#include <iostream>
+#include <math.h>
 #include <vector>
 
 using namespace std;
@@ -11,15 +11,13 @@ int main()
 {
     setlocale(LC_ALL, "Ru");
     FindOptimalPath_InTriangle();
+
+    return 0;
 }
-
-
-
 
 void FindOptimalPath_InTriangle()
 {
-    int height = 100, size = 0; // height - глубина дерева, n - ширина
-    
+    int height = 100, size = 0, j; 
     
     while (height > 30)
     {
@@ -27,18 +25,24 @@ void FindOptimalPath_InTriangle()
         cin >> height;
     }
 
+    // Листья!!!
     vector <int> NumLeaves(height);
+    NumLeaves[0] = 1;
     for (int i = 0; i < height - 1; i++)
     {
         size = size * 2 + 2;
-        NumLeaves[i + 1] = size;
+        NumLeaves[i + 1] = size + 1;
     }
+    size++;
+
     for (int i = 0; i < height; i++)
         cout << "NumLeaves[i] = " << NumLeaves[i] << "\n";
 
     cout << "size " << size << endl;
+
     vector <int> Triangle(size);
     vector <int> SumPath(size);
+
     //======= Completion arrey ======= Заполнение
     for (int i = 0; i < size; i++)
         Triangle[i] = rand() % 10;
@@ -47,20 +51,33 @@ void FindOptimalPath_InTriangle()
     for (int i = 0; i < size; i++)
         cout << Triangle[i] << " ";
 
+    // ---------------    Func    --------------------
     SumPath_InTriangle(Triangle, SumPath);
 
+    // =========== Enter in console =============
+    cout << "\nVector\n";
+    j = 0;
+    for (int i = 0; i < height; i++)
+    {
+        while (j < NumLeaves[i])
+        {
+            cout << Triangle[j] << " ";
+            j++;
+        }
+        cout << endl;
+    }
 
-
-    cout << "Vector\n";
-    for (int i = 0; i < size; i++)
-        cout << Triangle[i] << " ";
-    cout << "\n\nSum\n";
-    for (int i = 0; i < size; i++)
-        cout << Triangle[i] << " ";
-
-    /*cout << "Triangle[min] = " << Triangle[0] << endl;
-    cout << "Triangle[max] = " << Triangle[size-1];*/
-
+    cout << "\nSum\n";
+    j = 0;
+    for (int i = 0; i < height; i++)
+    {
+        while (j < NumLeaves[i])
+        {
+            cout << SumPath[j] << " ";
+            j++;
+        }
+        cout << endl;
+    }
 }
 
 void SumPath_InTriangle(vector<int>& Trg, vector<int>& Sum)
@@ -69,7 +86,6 @@ void SumPath_InTriangle(vector<int>& Trg, vector<int>& Sum)
     Sum[0] = Trg[0];
     for (int i = 1; i < n; i++)
     {
-        cout << "in if i = " << i << endl;
         if (count % 2 == 0)
         {
             Sum[i] = Trg[i] + Trg[(i - 1) / 2];
