@@ -1,11 +1,19 @@
 #include <iostream>
 #include <math.h>
-#include <vector>
 
 using namespace std;
 
 void FindOptimalPath_InTriangle();
-void SumPath_InTriangle(vector<int>& Trg, vector<int>& Sum);
+void SumPath_InTriangle(int** Trg, int** Sum, int n);
+void Enter_Trg(int** Arr, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j <= i; j++)
+            cout << Arr[i][j] << " ";
+        cout << endl;
+    }
+}
 
 int main()
 {
@@ -15,85 +23,132 @@ int main()
     return 0;
 }
 
+
+
 void FindOptimalPath_InTriangle()
 {
-    int height = 100, size = 0, j; 
-    
-    while (height > 30)
+    int height = INT_MAX;
+
+    while (height > 10000)
     {
-        cout << "Введите высоту двоичного дерева, до 30\n";
+        cout << "Введите высоту треугольника\n";
         cin >> height;
     }
 
-    // Листья!!!
-    vector <int> NumLeaves(height);
-    NumLeaves[0] = 1;
-    for (int i = 0; i < height - 1; i++)
-    {
-        size = size * 2 + 2;
-        NumLeaves[i + 1] = size + 1;
-    }
-    size++;
-
+        int** Triangle = new int* [height];
     for (int i = 0; i < height; i++)
-        cout << "NumLeaves[i] = " << NumLeaves[i] << "\n";
-
-    cout << "size " << size << endl;
-
-    vector <int> Triangle(size);
-    vector <int> SumPath(size);
-
-    //======= Completion arrey ======= Заполнение
-    for (int i = 0; i < size; i++)
-        Triangle[i] = rand() % 10;
-
-    cout << "Vector\n";
-    for (int i = 0; i < size; i++)
-        cout << Triangle[i] << " ";
-
-    // ---------------    Func    --------------------
-    SumPath_InTriangle(Triangle, SumPath);
-
-    // =========== Enter in console =============
-    cout << "\nVector\n";
-    j = 0;
+        Triangle[i] = new int[height];
+    int** SumPath = new int* [height];
     for (int i = 0; i < height; i++)
-    {
-        while (j < NumLeaves[i])
+        SumPath[i] = new int[height];
+
+    //======= Completion arrey ======= 
+    for (int i = 0; i < height; i++)
+        for (int j = 0; j < height; j++)
         {
-            cout << Triangle[j] << " ";
-            j++;
-        }
-        cout << endl;
-    }
+            if (j <= i)
+                Triangle[i][j] = rand() % 9 + 1;
+            else
+                Triangle[i][j] = 0;
 
-    cout << "\nSum\n";
-    j = 0;
-    for (int i = 0; i < height; i++)
-    {
-        while (j < NumLeaves[i])
-        {
-            cout << SumPath[j] << " ";
-            j++;
         }
-        cout << endl;
-    }
+
+    cout << "Массив\n";
+    Enter_Trg(Triangle, height);
+
+    SumPath_InTriangle(Triangle, SumPath, height);
+
+    cout << "Массив сумм\n";
+    Enter_Trg(SumPath, height);
+    cout << "the end";
 }
 
-void SumPath_InTriangle(vector<int>& Trg, vector<int>& Sum)
+void SumPath_InTriangle(int** Trg, int** Sum, int n)
 {
-    int n = Trg.size(), count = 0;
+    int* Path = new int[n];
+    int maxP, indP;
     Sum[0] = Trg[0];
     for (int i = 1; i < n; i++)
+        for (int j = 0; j < n; j++)
+        {
+            if (Sum[i - 1][j] > Sum[i - 1][j - 1])
+            {
+                Sum[i][j] = Trg[i][j] + Sum[i - 1][j];
+            }
+            else
+            {
+                Sum[i][j] = Trg[i][j] + Sum[i - 1][j - 1];
+            }
+        }
+
+    
+    for (int j = n - 1; j >= 0; j--)
     {
-        if (count % 2 == 0)
-        {
-            Sum[i] = Trg[i] + Trg[(i - 1) / 2];
-        }
-        else
-        {
-            Sum[i] = Trg[i] + Trg[(i - 2) / 2];
-        }
-        count++;
+        maxP = 0;
+        for (int i = 0; i < n; i++)
+            if (maxP < Sum[j][i])
+            {
+                maxP = Sum[j][i];
+                indP = i;
+            }
+        Path[j] = indP;
     }
+    maxP = 0;
+    for (int i = 0; i < n; i++)
+        if (maxP < Sum[n - 1][i])
+            maxP = Sum[n - 1][i];
+
+    cout << "Максимальный путь равен " << Path[n - 1] << endl;
+    cout << "Путь равен\n i,j";
+    for (int i = 0; i < n; i++)
+        cout << " -> " << i << "," << Path[i];
+    cout << endl;
 }
+
+
+
+//void FindOptimalPath_InTriangle()
+//{
+//    int height = INT_MAX, size = 1;
+//
+//    vector <vector <int>> Triangle;
+//    vector <vector <int>> SumPath;
+//
+//    while (height > 10000)
+//    {
+//        cout << "Введите высоту треугольника\n";
+//        cin >> height;
+//    }
+//    vector <int> NumLeaves(height - 1);
+//    NumLeaves[0] = 1;
+//    for (int i = 0; i < height - 1; i++)
+//    {
+//        size = size + i;
+//        NumLeaves[i] = size;
+//    }
+//
+//    // ====== Enter Lists =======
+//    for (int i = 0; i < height - 1; i++)
+//        cout << "NumLeaves[i] = " << NumLeaves[i] << "\n";
+//    cout << "size " << size << endl;
+//
+//    Triangle.resize(size, vector <int>(1));
+//    for (int i = 0; i < size; i++)
+//    {
+//        Triangle[i].resize(NumLeaves[i]);
+//
+//    }
+//    
+//    cout << "the end";
+//    /*for (int i = 0; i < size; i++)
+//        for (int j = 0; j < NumLeaves[i]; j++)
+//            Triangle[i][j] = rand() % 10;*/
+//
+//    /*cout << "Treugol'nik\n";
+//    for (int i = 0; i < size; i++)
+//    {
+//        for (int j = 0; j < NumLeaves[i]; j++)
+//            cout << Triangle[i][j] << " ";
+//        cout << endl;
+//    }*/
+//}
