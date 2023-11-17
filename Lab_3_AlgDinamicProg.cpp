@@ -21,17 +21,15 @@ void Chain();
 int main()
 {
     setlocale(LC_ALL, "Ru");
-    //FindOptimalPath_InTriangle();
+    cout << "Нахождение пути в пирамиде\n\n";
+    FindOptimalPath_InTriangle();
+    cout << "Поиск максимальной общей подследовательности в цепи ДНК\n\n";
     Chain();
 
     return 0;
 }
 
-
-
-
-
-void Chain() // Задача с цепочками
+void Chain()
 {
 
     int size1 = 100, size2 = 100;
@@ -85,7 +83,35 @@ void Chain() // Задача с цепочками
         }
     }
 
+    int lon = CountCoincid[size1 - 1][size2 - 1]; //длина максимальной цепочки
 
+    int** Chain = new int* [lon];
+    for(int i = 0; i < lon; i++)
+        Chain[i] = new int[3];
+    for (int k = 0; k < lon; k++)
+    {
+        Chain[0][k] = lon - k;
+        for (int i = size1 - 1; i > 0; i--)
+        {
+            bool flag = false;
+            for (int j = size2 - 1; j > 0; j--)
+            {
+                if ((Coincid[i][j] == 1) && (Chain[0][k] == CountCoincid[i][j]))
+                {
+                    flag = true;
+                    Chain[1][k] = i;
+                    Chain[2][k] = j;
+                    break;
+                }
+                if (Chain[0][k] != CountCoincid[i][j])
+                    break;
+            }
+            if (flag) break;
+        }
+    }
+    
+    cout << "Длина максимальной цепочки равна " << lon <<endl;
+    cout << "i,j = " /*<< lonI << "," << lonJ*/;
 
 
     cout << "Массив совпадений:\n";
@@ -130,17 +156,10 @@ void Chain() // Задача с цепочками
             }
             if (flag1 = true)
                 break;
-
-            
         }
     }*/
     
-
-    cout << Str1 << endl;
-    cout << Str2 << endl;
 }
-
-
 
 //------------------  Algorithm for finding the maximum path in a triangle  ------------------
 void FindOptimalPath_InTriangle()
@@ -178,7 +197,7 @@ void FindOptimalPath_InTriangle()
 
     cout << "Массив сумм\n";
     Enter_Trg(SumPath, height);
-    cout << "the end";
+    cout << endl;
 }
 void SumPath_InTriangle(int** Trg, int** Sum, int n)
 {
@@ -218,50 +237,3 @@ void SumPath_InTriangle(int** Trg, int** Sum, int n)
     cout << endl;
 }
 
-
-
-//void FindOptimalPath_InTriangle()
-//{
-//    int height = INT_MAX, size = 1;
-//
-//    vector <vector <int>> Triangle;
-//    vector <vector <int>> SumPath;
-//
-//    while (height > 10000)
-//    {
-//        cout << "Введите высоту треугольника\n";
-//        cin >> height;
-//    }
-//    vector <int> NumLeaves(height - 1);
-//    NumLeaves[0] = 1;
-//    for (int i = 0; i < height - 1; i++)
-//    {
-//        size = size + i;
-//        NumLeaves[i] = size;
-//    }
-//
-//    // ====== Enter Lists =======
-//    for (int i = 0; i < height - 1; i++)
-//        cout << "NumLeaves[i] = " << NumLeaves[i] << "\n";
-//    cout << "size " << size << endl;
-//
-//    Triangle.resize(size, vector <int>(1));
-//    for (int i = 0; i < size; i++)
-//    {
-//        Triangle[i].resize(NumLeaves[i]);
-//
-//    }
-//    
-//    cout << "the end";
-//    /*for (int i = 0; i < size; i++)
-//        for (int j = 0; j < NumLeaves[i]; j++)
-//            Triangle[i][j] = rand() % 10;*/
-//
-//    /*cout << "Treugol'nik\n";
-//    for (int i = 0; i < size; i++)
-//    {
-//        for (int j = 0; j < NumLeaves[i]; j++)
-//            cout << Triangle[i][j] << " ";
-//        cout << endl;
-//    }*/
-//}
