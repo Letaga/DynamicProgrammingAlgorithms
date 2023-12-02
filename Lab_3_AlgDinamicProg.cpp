@@ -1,6 +1,5 @@
 #include <iostream>
 #include <math.h>
-#include <vector>
 
 using namespace std;
 
@@ -83,7 +82,7 @@ void Chain()
         }
     }
 
-    int lon = CountCoincid[size1 - 1][size2 - 1]; //длина максимальной цепочки
+    int lon = CountCoincid[size1 - 1][size2 - 1]; //maximum chain length
 
     int** Chain = new int* [lon];
     for(int i = 0; i < lon; i++)
@@ -133,32 +132,6 @@ void Chain()
         }
         cout << endl;
     }
-
-   /* cout << "Введите цепочку днк из символов:\na, c, g, t\n";
-    for (int i = 0; i < size; i++)
-    {
-        cin >> Str1[i];
-        while (true)
-        {
-
-            switch (Str1[i])
-            {
-            case 'a':
-                flag1 = true;
-            case 'g':
-                flag1 = true;
-            case 'c':
-                flag1 = true;
-            case 't':
-                flag1 = true;
-            default:
-                flag1 = false;
-            }
-            if (flag1 = true)
-                break;
-        }
-    }*/
-    
 }
 
 //------------------  Algorithm for finding the maximum path in a triangle  ------------------
@@ -236,4 +209,3 @@ void SumPath_InTriangle(int** Trg, int** Sum, int n)
         cout << " -> " << i << "," << Path[i];
     cout << endl;
 }
-
